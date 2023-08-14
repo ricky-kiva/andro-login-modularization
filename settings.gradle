@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 rootProject.name='My Simple Login'
 include ':app'
 include ':core'
+include ':chat'
