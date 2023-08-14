@@ -1,4 +1,4 @@
-package com.dicoding.mysimplelogin
+package com.rickyslash.core
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -9,7 +9,9 @@ class SessionManager(context: Context) {
         const val KEY_USERNAME = "username"
     }
 
-    private var pref: SharedPreferences = context.getSharedPreferences("Session", Context.MODE_PRIVATE)
+    private var pref: SharedPreferences = context.getSharedPreferences("Session",
+        Context.MODE_PRIVATE
+    )
     private var editor: SharedPreferences.Editor = pref.edit()
 
     fun createLoginSession() {
