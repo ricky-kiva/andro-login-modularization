@@ -5,6 +5,9 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.dicoding.mysimplelogin.databinding.ActivityHomeBinding
+import com.google.android.play.core.splitinstall.SplitInstallManager
+import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
+import com.google.android.play.core.splitinstall.SplitInstallRequest
 import com.rickyslash.core.SessionManager
 
 class HomeActivity : AppCompatActivity() {
@@ -29,7 +32,7 @@ class HomeActivity : AppCompatActivity() {
 
         binding.fab.setOnClickListener {
             try {
-                moveToChatActivity()
+                installChatModule()
             } catch (e: Exception) {
                 Toast.makeText(this, "Module not found", Toast.LENGTH_SHORT).show()
             }
@@ -39,6 +42,28 @@ class HomeActivity : AppCompatActivity() {
     private fun moveToMainActivity() {
         startActivity(Intent(this, MainActivity::class.java))
         finish()
+    }
+
+    private fun installChatModule() {
+        val splitInstallManager = SplitInstallManagerFactory.create(this)
+        val moduleChat = "chat"
+        if (splitInstallManager.installedModules.contains(moduleChat)) {
+            moveToChatActivity()
+            Toast.makeText(this, "Open module", Toast.LENGTH_SHORT).show()
+        } else {
+            val request = SplitInstallRequest.newBuilder()
+                .addModule(moduleChat)
+                .build()
+
+            splitInstallManager.startInstall(request)
+                .addOnSuccessListener {
+                    Toast.makeText(this, "Success installing module", Toast.LENGTH_SHORT).show()
+                    moveToChatActivity()
+                }
+                .addOnFailureListener {
+                    Toast.makeText(this, "Error installing module", Toast.LENGTH_SHORT).show()
+                }
+        }
     }
 
     private fun moveToChatActivity() {
